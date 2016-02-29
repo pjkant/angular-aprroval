@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng-app="pendingApprovals">
+
+<head>
+    <title>Approval Management Screen Usana</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/app/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/app/css/app.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/app/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/app/js/angular/angular.js"></script>
+    <script src="/app/controllers/approvalListController.js"></script>
+
+</head>
+
+<body>
+    <div class="container" ng-controller="approvalController">
+     <div ng-init='loadData()'></div>
+    <h1> Pending Approvals </h1>
+        <p>List of Pending approvals:    &nbsp;&nbsp;&nbsp;  
+            <b>
+            <span style="color:red" ng-show="errorName"> Error :  {{message}}    </span></p>
+            <span style="color:green" ng-show="successCode"> Status :  {{message}}    </span></p>
+            </b>
+    <p>
+        <input type="text" placeholder="Search By Country" ng-model="searchApprovals.country"/>
+    
+    </p>
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th ng-click="columnToSort('customerId')"> Customer Id <span ng-class="sortClass('customerId')"></span> </th>
+                     <th ng-click="columnToSort('key')"> Key <span ng-class="sortClass('key')"></span> </th>
+                     <th ng-click="columnToSort('oldValue')"> Old Value <span ng-class="sortClass('oldValue')"></span> </th>
+                     <th ng-click="columnToSort('newValue')"> New Value <span ng-class="sortClass('newValue')"></span> </th>
+                     <th ng-click="columnToSort('requestDate')"> Requested Date <span ng-class="sortClass('requestDate')"></span> </th>
+                     <th ng-click="columnToSort('requestedBy')"> Requested By <span ng-class="sortClass('requestedBy')"></span> </th>
+                     <th ng-click="columnToSort('country')"> Country <span ng-class="sortClass('country')"></span> </th>
+                    <th>Authorize</th>
+                    <th>Approve</th>
+                    <th>Deny</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="approval in approvalList | orderBy:sortColumn:reverseSort | filter:searchApprovals">
+                    <td>{{approval.customerId}}</td>
+                    <td>{{approval.key}}</td>
+                    <td>{{approval.oldValue | currency:"$"}}</td>
+                    <td>{{approval.newValue | currency:"$"}}</td>
+                    <td>{{approval.requestDate | date : "MM/dd/yyyy" }}</td>
+                    <td>{{approval.requestedBy}}</td>
+                    <td>{{approval.country}}</td>
+                 <!--    <td> <input type="text"  ng-model="approval.authorize" size="2"/></td> -->
+                    <td> {{ approval.authorize}} 
+                    <td> <input type="button" value="approve" ng-click="grantApproval(approval)" </td>
+                    <td> <input type="button" value="Deny" ng-click="denyApproval(approval)" </td>
+                </tr>
+            </tbody>
+        </table>
+    <div>
+        <input class="btn btn-primary" type="button" value="Cancel">
+        &nbsp;&nbsp;&nbsp;
+        <input class="btn btn-primary" type="submit"  ng-click="sendData()"value="Save">
+    </div>
+        
+    </div>
+    
+
+
+</body>
+
+</html>
